@@ -52,7 +52,7 @@ public:
     inline unsigned int get_iter() const noexcept { return iter; }
 
     inline unsigned int get_max_iter() const noexcept { return max_iter; }
-    inline void set_max_iter(unsigned int mi) const noexcept { max_iter = mi; }
+    inline void set_max_iter(unsigned int mi) noexcept { max_iter = mi; }
 
 private:
     Flow flow;

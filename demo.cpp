@@ -404,6 +404,7 @@ void bench_hpf(const BkGraph<capty, capty> bkg)
     std::cout << " seconds, flow: " << graph.compute_maxflow() << "\n";
 }
 
+#ifdef WITH_HI_PR
 void bench_hi_pr(const BkGraph<int, int> bkg)
 {
     std::cout << "init...\n";
@@ -442,6 +443,7 @@ void bench_hi_pr(const BkGraph<int, int> bkg)
     std::cout << "total: " << (build_dur + solve_dur).count() << " seconds, ";
     std::cout << "maxflow: " << graph.flow - graph.flow0 << "\n";
 }
+#endif
 
 /*void bench_sk_old(const BkGraph<int, int> bkg)
 {
@@ -871,10 +873,14 @@ int main(int argc, const char* argv[])
             } */else if (algo =="hpf") {
                 std::cerr << "HPF:" << std::endl;
                 bench_hpf(bkg);
-            } else if (algo =="hi_pr") {
+            }
+            #ifdef WITH_HI_PR
+            else if (algo =="hi_pr") {
                 std::cerr << "HI_PR:" << std::endl;
                 bench_hi_pr(bkg);
-            } /*else if (algo =="sk_old") {
+            }
+            #endif
+            /*else if (algo =="sk_old") {
                 std::cerr << "Strandmark-Kahl old:" << std::endl;
                 bench_sk_old(bkg);
             }*/ else if (algo =="psk") {

@@ -42,7 +42,9 @@ namespace fs = std::experimental::filesystem;
 #include "reimpls/strandmarkkahl.h"
 #include "ibfs/ibfs.h"
 #include "reimpls/hpf.h"
+#ifdef WITH_HI_PR
 #include "hi_pr/hi_pr.h"
+#endif
 #include "sppr/maxFlow.h"
 
 #if PARD_IS_AVAILABLE
@@ -398,6 +400,7 @@ std::tuple<Flow, double, double> bench_hpf(BenchConfig config, const Data& data)
     return std::make_tuple(flow, build_dur.count(), solve_dur.count());
 }
 
+#ifdef WITH_HI_PR
 template <class Cap, class Term, class Flow, class Index, class Data>
 std::tuple<Flow, double, double> bench_hi_pr(BenchConfig config, const Data& data)
 {
@@ -435,6 +438,7 @@ std::tuple<Flow, double, double> bench_hi_pr(BenchConfig config, const Data& dat
     auto flow = graph.flow - graph.flow0;
     return std::make_tuple(flow, build_dur.count(), solve_dur.count());
 }
+#endif
 
 template <class Cap, class Term, class Flow, class Index, class Data>
 std::tuple<Flow, double, double> bench_gridcut(
@@ -1246,9 +1250,11 @@ void bench_data(DataConfig data_config, BenchConfig bench_config, const Data& da
         case ALGO_HPF_LL:
             std::tie(flow, build_time, solve_time) = bench_hpf<Cap, Term, Flow, Index, Data, reimpls::LabelOrder::LOWEST_FIRST, reimpls::RootOrder::LIFO>(bench_config, data);
             break;
+#ifdef WITH_HI_PR
         case ALGO_HI_PR:
             std::tie(flow, build_time, solve_time) = bench_hi_pr<Cap, Term, Flow, Index, Data>(bench_config, data);
             break;
+#endif
         case ALGO_GRIDCUT:
             std::tie(flow, build_time, solve_time) = bench_gridcut<Cap, Term, Flow, Index, Data>(bench_config, data, data_config);
             break;
@@ -1388,8 +1394,10 @@ const char* algo_to_string(Algorithm algo)
         return "hpf_lf";
     case ALGO_HPF_LL:
         return "hpf_ll";
+#ifdef WITH_HI_PR
     case ALGO_HI_PR:
         return "hi_pr";
+#endif
     case ALGO_GRIDCUT:
         return "gridcut";
 
@@ -1427,7 +1435,9 @@ Algorithm algo_from_string(const std::string& str)
     if (str == algo_to_string(ALGO_HPF_HL)) return ALGO_HPF_HL;
     if (str == algo_to_string(ALGO_HPF_LF)) return ALGO_HPF_LF;
     if (str == algo_to_string(ALGO_HPF_LL)) return ALGO_HPF_LL;
+#ifdef WITH_HI_PR
     if (str == algo_to_string(ALGO_HI_PR)) return ALGO_HI_PR;
+#endif
     if (str == algo_to_string(ALGO_GRIDCUT)) return ALGO_GRIDCUT;
 
     if (str == algo_to_string(ALGO_PMBK)) return ALGO_PMBK;

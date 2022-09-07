@@ -781,7 +781,7 @@ int HiPr::main(int argc, char *argv[])
 
 	t2 = timer() - t2;
 
-	printf("c flow:       %12.01f\n", flow);
+	printf("c flow:       %12.01f\n", static_cast<double>(flow));
 
 #ifndef CUT_ONLY
 	stageTwo();

@@ -1289,4 +1289,3 @@ intT maxFlow(FlowGraph<intT>& g) {
     prepareMaxFlow(g);
     return maxFlow();
 }
-                 
